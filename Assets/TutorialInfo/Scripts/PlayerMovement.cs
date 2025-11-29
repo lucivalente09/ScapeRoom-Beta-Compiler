@@ -1,11 +1,8 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] GameObject Zeroabove;
-    [SerializeField] GameObject Firstabove;
-    [SerializeField] GameObject Secondabove;
-    [SerializeField] GameObject Threeabove;
     [SerializeField] float Speed;
     [SerializeField] GameObject Player;
     [SerializeField] GameObject Arrowabove;
@@ -14,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject Arrowbelow;
 
     [SerializeField] int click = 0;
+    [SerializeField] GameObject[] ListWayPoints;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,10 +26,11 @@ public class PlayerMovement : MonoBehaviour
     {
         switch (click)
         {
+
             // Si se vuelve atras o sea click = 0 entonces
             case 0:
-                Player.transform.position = Vector3.Lerp(Player.transform.position, Zeroabove.transform.position, Speed * Time.deltaTime);
-                
+                Player.transform.position = Vector3.Lerp(Player.transform.position, ListWayPoints[0].transform.position, Speed * Time.deltaTime);
+
                 Arrowabove.SetActive(true);
                 Arrowleft.SetActive(false);
                 Arrowright.SetActive(false);
@@ -40,37 +39,38 @@ public class PlayerMovement : MonoBehaviour
 
             // Si se hace click en la flacha de arriba entonces 
             case 1:
-  
-                Player.transform.position = Vector3.Lerp(Player.transform.position, Firstabove.transform.position, Speed * Time.deltaTime);
-                Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, Quaternion.Euler(0 ,0 ,0), Speed * Time.deltaTime);
-                
+
+                Player.transform.position = Vector3.Lerp(Player.transform.position, ListWayPoints[1].transform.position, Speed * Time.deltaTime);
+                Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, Quaternion.identity, Speed * Time.deltaTime);
+
                 Arrowabove.SetActive(false);
                 Arrowleft.SetActive(true);
                 Arrowright.SetActive(true);
                 Arrowbelow.SetActive(true);
                 break;
 
+
             // Si se hace click en la flecha izquierda entonces
             case 2:
-                
-                
+
+
                 Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, Quaternion.Euler(0, -90, 0), Speed * Time.deltaTime);
-                
+
                 Arrowabove.SetActive(false);
                 Arrowleft.SetActive(false);
                 Arrowright.SetActive(false);
-                Player.transform.position = Vector3.Lerp(Player.transform.position, Secondabove.transform.position, Speed * Time.deltaTime);
+                Player.transform.position = Vector3.Lerp(Player.transform.position, ListWayPoints[2].transform.position, Speed * Time.deltaTime);
                 break;
 
             // Si se hace click en la flecha derecha entonces
             case -1:
                 Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, Quaternion.Euler(0, 90, 0), Speed * Time.deltaTime);
-                
+
                 Arrowabove.SetActive(false);
                 Arrowleft.SetActive(false);
                 Arrowright.SetActive(false);
                 Arrowbelow.SetActive(true);
-                Player.transform.position = Vector3.Lerp(Player.transform.position, Threeabove.transform.position, Speed * Time.deltaTime);
+                Player.transform.position = Vector3.Lerp(Player.transform.position, ListWayPoints[3].transform.position, Speed * Time.deltaTime);
                 break;
 
             // Si se hace click en la flecha abajo si estas en la flecha derecha entonces
@@ -80,10 +80,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Si el click es menor que -2 entonces que vuelva a 0
-        if (click < -2)
-        {
-            click = 0;
-        }
+        Mathf.Clamp(click, -2, 2);
     }
 
 
@@ -120,5 +117,8 @@ public class PlayerMovement : MonoBehaviour
 
 
     }
+
+
+
 
 }
