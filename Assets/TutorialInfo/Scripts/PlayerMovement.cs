@@ -13,9 +13,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject Arrowright;
     [SerializeField] GameObject Arrowbelow;
 
-    Quaternion rot;
-    Quaternion rotzero = Quaternion.Euler(0, 0, 0);
-    Quaternion rotsecond = Quaternion.Euler(0, 90, 0);
     [SerializeField] int click = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
             // Si se vuelve atras o sea click = 0 entonces
             case 0:
                 Player.transform.position = Vector3.Lerp(Player.transform.position, Zeroabove.transform.position, Speed * Time.deltaTime);
+                
                 Arrowabove.SetActive(true);
                 Arrowleft.SetActive(false);
                 Arrowright.SetActive(false);
@@ -42,8 +40,10 @@ public class PlayerMovement : MonoBehaviour
 
             // Si se hace click en la flacha de arriba entonces 
             case 1:
+  
                 Player.transform.position = Vector3.Lerp(Player.transform.position, Firstabove.transform.position, Speed * Time.deltaTime);
-                Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, rotzero, Speed * Time.deltaTime);
+                Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, Quaternion.Euler(0 ,0 ,0), Speed * Time.deltaTime);
+                
                 Arrowabove.SetActive(false);
                 Arrowleft.SetActive(true);
                 Arrowright.SetActive(true);
@@ -52,8 +52,10 @@ public class PlayerMovement : MonoBehaviour
 
             // Si se hace click en la flecha izquierda entonces
             case 2:
-                rot = Quaternion.Euler(0, -90, 0);
-                Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, rot, Speed * Time.deltaTime);
+                
+                
+                Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, Quaternion.Euler(0, -90, 0), Speed * Time.deltaTime);
+                
                 Arrowabove.SetActive(false);
                 Arrowleft.SetActive(false);
                 Arrowright.SetActive(false);
@@ -62,7 +64,8 @@ public class PlayerMovement : MonoBehaviour
 
             // Si se hace click en la flecha derecha entonces
             case -1:
-                Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, rotsecond, Speed * Time.deltaTime);
+                Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, Quaternion.Euler(0, 90, 0), Speed * Time.deltaTime);
+                
                 Arrowabove.SetActive(false);
                 Arrowleft.SetActive(false);
                 Arrowright.SetActive(false);
