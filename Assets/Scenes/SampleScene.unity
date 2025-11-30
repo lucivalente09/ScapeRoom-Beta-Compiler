@@ -2192,16 +2192,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32d98354b88d874db64946d65380e19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Zeroabove: {fileID: 1983416848}
-  Firstabove: {fileID: 87885835}
-  Secondabove: {fileID: 976436598}
-  Threeabove: {fileID: 504900393}
   Speed: 5
   Player: {fileID: 182318658}
   Arrowabove: {fileID: 589477151}
   Arrowleft: {fileID: 1362753305}
   Arrowright: {fileID: 935532107}
   Arrowbelow: {fileID: 1576739204}
+  ListWayPoints:
+  - {fileID: 1983416848}
+  - {fileID: 87885835}
+  - {fileID: 976436598}
+  - {fileID: 504900393}
   click: 0
 --- !u!4 &2044443288
 Transform:

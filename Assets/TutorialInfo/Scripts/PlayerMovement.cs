@@ -13,8 +13,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject[] ListWayPoints;
 
 
-    Quaternion rot;
-
     [SerializeField] int click = 0;
 
 
@@ -45,10 +43,8 @@ public class PlayerMovement : MonoBehaviour
             // Si se hace click en la flacha de arriba entonces 
             case 1:
 
-
                 Player.transform.position = Vector3.Lerp(Player.transform.position, ListWayPoints[1].transform.position, Speed * Time.deltaTime);
                 Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, Quaternion.identity, Speed * Time.deltaTime);
-
 
                 Player.transform.position = Vector3.Lerp(Player.transform.position, ListWayPoints[1].transform.position, Speed * Time.deltaTime);
                 Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation,  Quaternion.identity, Speed * Time.deltaTime);
@@ -63,12 +59,8 @@ public class PlayerMovement : MonoBehaviour
             // Si se hace click en la flecha izquierda entonces
             case 2:
 
-
-
                 Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, Quaternion.Euler(0, -90, 0), Speed * Time.deltaTime);
 
-
-      
                 Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, Quaternion.Euler(0, -90, 0), Speed * Time.deltaTime);
 
                 Arrowabove.SetActive(false);
@@ -80,9 +72,6 @@ public class PlayerMovement : MonoBehaviour
             // Si se hace click en la flecha derecha entonces
             case -1:
                 Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, Quaternion.Euler(0, 90, 0), Speed * Time.deltaTime);
-
-
-
 
                 Arrowabove.SetActive(false);
                 Arrowleft.SetActive(false);
