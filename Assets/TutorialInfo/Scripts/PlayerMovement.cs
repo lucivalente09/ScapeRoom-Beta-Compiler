@@ -11,8 +11,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject Arrowbelow;
     [SerializeField] GameObject[] ListWayPoints;
 
-    Quaternion rot;
-    [SerializeField] int click = 0;
+ 
+    [SerializeField] int WayPointsClick = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -25,11 +25,13 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch (click)
+        switch (WayPointsClick)
         {
+
             // Si se vuelve atras o sea click = 0 entonces
             case 0:
                 Player.transform.position = Vector3.Lerp(Player.transform.position, ListWayPoints[0].transform.position, Speed * Time.deltaTime);
+                Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, Quaternion.identity, Speed * Time.deltaTime);
                 Arrowabove.SetActive(true);
                 Arrowleft.SetActive(false);
                 Arrowright.SetActive(false);
@@ -48,65 +50,72 @@ public class PlayerMovement : MonoBehaviour
 
             // Si se hace click en la flecha izquierda entonces
             case 2:
-      
+                Player.transform.position = Vector3.Lerp(Player.transform.position, ListWayPoints[2].transform.position, Speed * Time.deltaTime);
                 Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, Quaternion.Euler(0, -90, 0), Speed * Time.deltaTime);
                 Arrowabove.SetActive(false);
                 Arrowleft.SetActive(false);
                 Arrowright.SetActive(false);
-                Player.transform.position = Vector3.Lerp(Player.transform.position, ListWayPoints[2].transform.position, Speed * Time.deltaTime);
+
                 break;
 
             // Si se hace click en la flecha derecha entonces
             case -1:
+                Player.transform.position = Vector3.Lerp(Player.transform.position, ListWayPoints[3].transform.position, Speed * Time.deltaTime);
                 Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, Quaternion.Euler(0, 90, 0), Speed * Time.deltaTime);
                 Arrowabove.SetActive(false);
                 Arrowleft.SetActive(false);
                 Arrowright.SetActive(false);
                 Arrowbelow.SetActive(true);
-                Player.transform.position = Vector3.Lerp(Player.transform.position, ListWayPoints[3].transform.position, Speed * Time.deltaTime);
+                
                 break;
 
             // Si se hace click en la flecha abajo si estas en la flecha derecha entonces
-            case -2:
-                click = 1;
+             case -2:
+                // Si el click es menor que -2 entonces que vuelva a 0
+                WayPointsClick = 1;
+
                 break;
+
+                
         }
 
-        // Si el click es menor que -2 entonces que vuelva a 0
-        Mathf.Clamp(click, -2, 2);
+
     }
 
 
+
+
+
     // Si se hace click en la flecha arriba
-    public void OnMouseDownAbove()
+    public void OnClickAbove()
     {
         // sube el contador click
-        click++;
+        WayPointsClick++;
 
     }
 
 
     // Si se hace click en la flecha izquierda
-    public void OnMouseDownLeft()
+    public void OnClickLeft()
     {
         // sube el contador click
-        click++;
+        WayPointsClick++;
 
     }
 
     // Si se hace click en la flecha derecha
-    public void OnMouseDownRight()
+    public void OnClickRight()
     {
         // baja el contador click a -1 esto ocurre para que el click no suba y vaya en el contador -1
-        click = -1;
+        WayPointsClick = -1;
 
     }
 
     // Si se hace click en la flecha abajo
-    public void OnMouseDownBelow()
+    public void OnClickBelow()
     {
         // baja el contador click
-        click--;
+        WayPointsClick--;
 
 
     }
