@@ -15,6 +15,8 @@ public class Puzzles : MonoBehaviour
     bool isCount = false;
 
 
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -25,18 +27,20 @@ public class Puzzles : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-
-        if (PuzzleRenderer.material.color == ColorsAct_Des[1] & isCount == false)
+        puzzlesEmpty.PuzzleCount = Mathf.Abs(puzzlesEmpty.PuzzleCount);
+        if (PuzzleRenderer.material.color == ColorsAct_Des[1] && isCount == false)
         {
             isCount = true;
             puzzlesEmpty.PuzzleCount++;
         }
 
-        else if (PuzzleRenderer.material.color != ColorsAct_Des[1] & isCount)
+        else if (PuzzleRenderer.material.color != ColorsAct_Des[1] && isCount )
         {
             isCount = false;
             puzzlesEmpty.PuzzleCount--;
+
         }
+
 
     }
 
@@ -44,21 +48,13 @@ public class Puzzles : MonoBehaviour
     {
         PuzzleRenderer.material.color = ColorsAct_Des[1];
         StartCoroutine(ChangeColorBack());
-
-
-
-
-
     }
 
     IEnumerator ChangeColorBack()
     {
 
-
         yield return new WaitForSeconds(1);
-        PuzzleRenderer.material.color = ColorsAct_Des[0];
-
-        
+        PuzzleRenderer.material.color = ColorsAct_Des[0];  
     }
 
 
