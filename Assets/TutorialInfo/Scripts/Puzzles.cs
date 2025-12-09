@@ -37,7 +37,6 @@ public class Puzzles : MonoBehaviour
         else if (PuzzleRenderer.material.color != ColorsAct_Des[1] && isCount )
         {
             isCount = false;
-            puzzlesEmpty.PuzzleCount--;
 
         }
 
@@ -47,15 +46,10 @@ public class Puzzles : MonoBehaviour
     public void OnMouseDown()
     {
         PuzzleRenderer.material.color = ColorsAct_Des[1];
-        StartCoroutine(ChangeColorBack());
+    
     }
 
-    IEnumerator ChangeColorBack()
-    {
 
-        yield return new WaitForSeconds(1);
-        PuzzleRenderer.material.color = ColorsAct_Des[0];  
-    }
 
 
 }
