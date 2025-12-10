@@ -15,16 +15,16 @@ public class PuzzlesEmpty : Puzzles
     public Light[] LightGreen;
 
     [SerializeField] float Speed;
-    
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-       LightGreen[0].enabled = false;
-       LightGreen[1].enabled = false;
-       LightGreen[2].enabled = false;
-      
+        LightGreen[0].enabled = false;
+        LightGreen[1].enabled = false;
+        LightGreen[2].enabled = false;
+
 
     }
 
@@ -62,7 +62,7 @@ public class PuzzlesEmpty : Puzzles
         if (PuzzleCount == 18 && completed == 2)
 
         {
-           
+
             Debug.Log("Puzzle_Completed_2!");
             completed++;
             LightGreenArray[2].material.color = Color.green;

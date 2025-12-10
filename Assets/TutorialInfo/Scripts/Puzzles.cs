@@ -20,7 +20,7 @@ public class Puzzles : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-       
+
         PuzzleRenderer.material.color = ColorsAct_Des[0];
     }
 
@@ -34,7 +34,7 @@ public class Puzzles : MonoBehaviour
             puzzlesEmpty.PuzzleCount++;
         }
 
-        else if (PuzzleRenderer.material.color != ColorsAct_Des[1] && isCount )
+        else if (PuzzleRenderer.material.color != ColorsAct_Des[1] && isCount)
         {
             isCount = false;
 
@@ -46,11 +46,13 @@ public class Puzzles : MonoBehaviour
     public void OnMouseDown()
     {
         PuzzleRenderer.material.color = ColorsAct_Des[1];
-    
+
     }
 
 
 
 
 }
+
+
 
