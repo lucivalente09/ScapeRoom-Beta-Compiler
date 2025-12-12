@@ -32,6 +32,8 @@ public class PuzzlesEmpty : Puzzles
     // Update is called once per frame
     private void Update()
     {
+
+        // si el puzzle1 se completa 1 vez
         if (PuzzleCount == 6 && completed == 0)
 
         {
@@ -46,6 +48,7 @@ public class PuzzlesEmpty : Puzzles
 
         }
 
+        // si el puzzle1 se completa por 2do vez
         if (PuzzleCount == 12 && completed == 1)
 
         {
@@ -59,6 +62,7 @@ public class PuzzlesEmpty : Puzzles
 
         }
 
+        // si el puzzle1 se completa por 3ra vez
         if (PuzzleCount == 18 && completed == 2)
 
         {
@@ -77,11 +81,17 @@ public class PuzzlesEmpty : Puzzles
         {
 
             Debug.Log("All_Puzzles1_Completed!");
-            GameObject gameObject = GetComponent<Transform>().parent.gameObject;
-            gameObject.AddComponent<Rigidbody>();
+            GameObject Base = GetComponent<Transform>().parent.gameObject;
+            Base.AddComponent<Rigidbody>();
 
 
         }
+
+        // Deteccion de mouse
+
+
+
+
     }
 
     IEnumerator ColorsDetected()
@@ -94,4 +104,7 @@ public class PuzzlesEmpty : Puzzles
         StopCoroutine(ColorsDetected());
 
     }
+
+    
+
 }

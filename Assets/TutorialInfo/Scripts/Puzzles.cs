@@ -5,9 +5,14 @@ using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 
+// Este script es para los puntos o botones de los puzzles
+
+
+
+
 public class Puzzles : MonoBehaviour
 {
-    [SerializeField] protected Renderer PuzzleRenderer;
+    [SerializeField] Renderer PuzzleRenderer;
 
     [SerializeField] PuzzlesEmpty puzzlesEmpty;
 
