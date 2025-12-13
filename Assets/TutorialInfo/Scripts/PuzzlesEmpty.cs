@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,20 +8,27 @@ using UnityEngine;
 public class PuzzlesEmpty : Puzzles
 {
 
-    public List<Renderer> PuzzleRendererList = new List<Renderer>();
+    [SerializeField] Renderer[] PuzzleRendererList;
+    
+
     [SerializeField] public int PuzzleCount;
 
-    public Renderer[] LightGreenArray;
+    [SerializeField] Renderer[] LightGreenList;
+
     [SerializeField] int completed = 0;
     public Light[] LightGreen;
 
     [SerializeField] float Speed;
+
+    bool isCounter = false;
 
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //Completed empieza en -1 porque al completar el primer puzzle se suma 1 y queda en 0, que es el primer indice del array LightGreenList
+        completed = -1;
         LightGreen[0].enabled = false;
         LightGreen[1].enabled = false;
         LightGreen[2].enabled = false;
@@ -33,64 +41,33 @@ public class PuzzlesEmpty : Puzzles
     private void Update()
     {
 
-        // si el puzzle1 se completa 1 vez
-        if (PuzzleCount == 6 && completed == 0)
-
+        if (PuzzleCount == 6 && !isCounter)
         {
-
             Debug.Log("Puzzle_Completed!");
             completed++;
-            LightGreenArray[0].material.color = Color.green;
-            LightGreen[0].name = "GreenLightOn";
-            LightGreen[0].enabled = true;
+            isCounter = true;
+            if (completed < LightGreenList.Length)
+            {
+                LightGreenList[completed].material.color = Color.green;
+                LightGreenList[completed].name = "LightGreen_On";
+                LightGreen[completed].enabled = true;
+            }
+
             StartCoroutine(ColorsDetected());
+       }
 
 
-        }
-
-        // si el puzzle1 se completa por 2do vez
-        if (PuzzleCount == 12 && completed == 1)
-
-        {
-
-            Debug.Log("Puzzle_Completed_1!");
-            completed++;
-            LightGreenArray[1].material.color = Color.green;
-            LightGreen[1].name = "GreenLightOn(1)";
-            LightGreen[1].enabled = true;
-            StartCoroutine(ColorsDetected());
-
-        }
-
-        // si el puzzle1 se completa por 3ra vez
-        if (PuzzleCount == 18 && completed == 2)
-
-        {
-
-            Debug.Log("Puzzle_Completed_2!");
-            completed++;
-            LightGreenArray[2].material.color = Color.green;
-            LightGreen[2].name = "GreenLightOn(2)";
-            LightGreen[2].enabled = true;
-            StartCoroutine(ColorsDetected());
-
-
-        }
-
-        if (completed == 3)
+        //Completed es 2 y no 3 ya que hay 3 puzzles (0,1,2)
+        if (completed == 2)
         {
 
             Debug.Log("All_Puzzles1_Completed!");
             GameObject Base = GetComponent<Transform>().parent.gameObject;
             Base.AddComponent<Rigidbody>();
+            Console.Clear();
 
 
         }
-
-        // Deteccion de mouse
-
-
-
 
     }
 
@@ -99,7 +76,8 @@ public class PuzzlesEmpty : Puzzles
         yield return new WaitForSeconds(0.5f);
         foreach (Renderer renderer in PuzzleRendererList)
         {
-            renderer.material.color = ColorsAct_Des[0];
+           isCounter = false;
+           renderer.material.color = ColorsAct_Des[0];
         }
         StopCoroutine(ColorsDetected());
 

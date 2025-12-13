@@ -42,6 +42,7 @@ public class Puzzles : MonoBehaviour
         else if (PuzzleRenderer.material.color != ColorsAct_Des[1] && isCount)
         {
             isCount = false;
+            puzzlesEmpty.PuzzleCount--;
 
         }
 
