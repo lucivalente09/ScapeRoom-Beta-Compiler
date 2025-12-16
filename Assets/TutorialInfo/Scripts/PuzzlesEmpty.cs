@@ -66,6 +66,8 @@ public class PuzzlesEmpty : Puzzles
             Base.AddComponent<Rigidbody>();
             Console.Clear();
 
+            completed++;
+
 
         }
 
