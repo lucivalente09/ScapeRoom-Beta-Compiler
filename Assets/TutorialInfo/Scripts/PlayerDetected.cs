@@ -14,7 +14,9 @@ public class PlayerDetected : MonoBehaviour
     [SerializeField] Camera MainCamera;
     bool IsKey = false;
     bool IsCandle = false;
-    [SerializeField] GameObject KeyEquipment;
+    [SerializeField] GameObject[] ObjectsSequence;
+
+    [SerializeField] GameObject HitBox_Lock; // Added this serialized field to provide the required argument  
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -68,24 +70,31 @@ public class PlayerDetected : MonoBehaviour
             {
                 hit.collider.gameObject.SetActive(false);
                 IsKey = true;
-                KeyEquipment.SetActive(true);
-                KeyEquipment.transform.position = RightHand.transform.position;
-                KeyEquipment.transform.SetParent(RightHand.transform, true);
+                ObjectsSequence[0].SetActive(true);
+                ObjectsSequence[0].transform.position = RightHand.transform.position;
+                ObjectsSequence[0].transform.SetParent(RightHand.transform, true);
             }
 
-            if (hit.collider.CompareTag("Candle"))
-            {
-                hit.collider.gameObject.SetActive(false);
-                IsCandle = true;
-                KeyEquipment.SetActive(true);
-                KeyEquipment.transform.position = RightHand.transform.position;
-                KeyEquipment.transform.SetParent(RightHand.transform, true);
-            }
         }
 
-        
 
+        Locking(HitBox_Lock); // Pass the required argument to the Locking method  
     }
 
 
+    void Locking(GameObject HitBox_Lock)
+    {
+        if (IsKey)
+        {
+            HitBox_Lock.layer = LayerMask.NameToLayer("Fall_Object");
+        }
+    }
+
+
+
+
+
 }
+
+
+
