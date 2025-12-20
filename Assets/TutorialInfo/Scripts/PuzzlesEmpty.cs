@@ -64,7 +64,7 @@ public class PuzzlesEmpty : Puzzles
             Debug.Log("All_Puzzles1_Completed!");
             GameObject Base = GetComponent<Transform>().parent.gameObject;
             Base.AddComponent<Rigidbody>();
-            Console.Clear();
+           
 
             completed++;
 

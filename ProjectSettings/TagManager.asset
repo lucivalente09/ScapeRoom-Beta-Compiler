@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Key
   - Candle
+  - Drawer
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - Fall_Object
   - Object
   - Wall
-  - 
+  - Drag
   - 
   - 
   - 
