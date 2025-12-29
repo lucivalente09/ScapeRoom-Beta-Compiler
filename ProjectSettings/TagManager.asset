@@ -10,6 +10,8 @@ TagManager:
   - Exam_Candle
   - Lighter
   - Hammer
+  - Paper
+  - Exam_Paper
   layers:
   - Default
   - TransparentFX
