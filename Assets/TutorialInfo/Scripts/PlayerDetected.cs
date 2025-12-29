@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,50 +11,71 @@ public class PlayerDetected : MonoBehaviour
     [SerializeField] LayerMask Fall_Objects;
     [SerializeField] LayerMask Objects;
     [SerializeField] LayerMask Wall;
-    [SerializeField] LayerMask []layers;
+    [SerializeField] LayerMask[] layers;
 
     [SerializeField] GameObject RightHand;
     [SerializeField] Camera MainCamera;
 
-    protected bool IsKey = false;
-    bool IsCandle = false;
-    [SerializeField] GameObject[] ObjectsSequence;
+    [SerializeField] bool Tools_Active = false;
+
+    [SerializeField] bool IsCandle = false;
+    [SerializeField] bool IsLighter = false;
+    [SerializeField] protected bool IsKey = false;
+    [SerializeField] bool IsHammer = false;
+    [SerializeField] int Planks = 4;
+
+
+    [SerializeField] GameObject[] ObjectsEquipment;
 
     [SerializeField] protected GameObject HitBox_Lock; // Added this serialized field to provide the required argument  
 
-  
+
     [SerializeField] Vector3 Pos_OpenDrawer;
     [SerializeField] int SpeedDrawer;
 
+    [SerializeField] GameObject Exam_Candle;
+    [SerializeField] GameObject Fire, IceObject;
+
+
+    [SerializeField] float Transparency;
+
+    public float Transpayency_Int
+    {
+        get
+        {
+            return Transparency;
+        }
+
+        set
+        {
+
+            Transparency = Mathf.Clamp(value, 0, 1);
+        }
+    }
+
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
+    private void Start()
+    {
+        Transpayency_Int = 1;
 
+    }
 
     // Update is called once per frame
     void Update()
     {
 
-
-        
-
         RaycastHit hit = new RaycastHit();
-        
+
 
         Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
 
         Debug.DrawRay(MainCamera.transform.position, ray.direction * 16, Color.red);
 
-        // Rayo que detecta el layer "Wall" para cambiar el layer del rayo que detecta los objetos interactuables a "Object"
-        if (Physics.Raycast(ray, out hit, 16, layers[3]))
-        {
 
-            layers[2] = LayerMask.GetMask("Nothing");
-        }
-        else if (!Physics.Raycast(ray, out hit, 16, layers[3]))
-        {
-            layers[2] = LayerMask.GetMask("Object");
 
-        }
 
         // Rayo que detecta el layer "Fall_Object"
         if (Physics.Raycast(ray, out hit, 16, layers[1]))
@@ -66,55 +89,193 @@ public class PlayerDetected : MonoBehaviour
 
         }
         // Rayo que detecta el layer "Object"
-        if (Physics.Raycast(ray, out hit, 16, layers[2]) && Input.GetMouseButtonDown(0))
+        if (Physics.Raycast(ray, out hit, 16, layers[2]))
         {
+
             Debug.Log("Hit object: " + hit.transform.name);
             // Si se detecta una llave, se desactiva el objeto en la escena, se activa la variable IsKey y se muestra el objeto en la mano del jugador
-            if (hit.collider.CompareTag("Key"))
+            if (hit.collider.CompareTag("Key") && Input.GetMouseButtonDown(0))
             {
-                hit.collider.gameObject.SetActive(false);
-                IsKey = true;
-                ObjectsSequence[0].SetActive(true);
-                ObjectsSequence[0].transform.position = RightHand.transform.position;
-                ObjectsSequence[0].transform.SetParent(RightHand.transform, true);
+
+
+                if (!Tools_Active)
+                {
+                    hit.collider.gameObject.SetActive(false);
+
+                    IsKey = true;
+                    ObjectsEquipment[0].SetActive(true);
+                    ObjectsEquipment[0].transform.position = RightHand.transform.position;
+                    ObjectsEquipment[0].transform.SetParent(RightHand.transform, true);
+                    Tools_Active = true;
+
+                }
+
+            }
+
+            if (hit.collider.CompareTag("Candle") && Input.GetMouseButtonDown(0))
+            {
+                if (!Tools_Active)
+                {
+
+                    IsCandle = true;
+                    hit.collider.transform.position = RightHand.transform.position;
+
+                    hit.collider.transform.SetParent(RightHand.transform, true);
+                    Tools_Active = true;
+                }
+
+
+            }
+
+            if (hit.collider.CompareTag("Lighter") && Input.GetMouseButtonDown(0))
+            {
+
+
+                if (!Tools_Active)
+                {
+                    hit.collider.gameObject.SetActive(false);
+
+                    IsLighter = true;
+                    ObjectsEquipment[2].SetActive(true);
+                    ObjectsEquipment[2].transform.position = RightHand.transform.position;
+                    ObjectsEquipment[2].transform.SetParent(RightHand.transform, true);
+                    Tools_Active = true;
+
+                }
+
+            }
+
+            if (hit.collider.CompareTag("Exam_Candle") && IsCandle)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+
+                    Debug.Log("Exam");
+
+                    if (RightHand.transform.childCount <= 0)
+                    {
+                        Debug.Log("No hay objeto en la mano");
+                    }
+
+                    if (RightHand.transform.childCount >= 1)
+                    {
+                        GameObject ChildHand = RightHand.gameObject.transform.transform.GetChild(0).gameObject;
+                        Debug.Log(RightHand.gameObject.transform.transform.GetChild(0).gameObject);
+                        ChildHand.transform.position = Exam_Candle.transform.position;
+                        ChildHand.transform.SetParent(Exam_Candle.transform, true);
+                        ChildHand.tag = "Untagged";
+                        Tools_Active = false;
+
+                        if (Input.GetMouseButtonDown(0) && IsLighter)
+                        {
+                            if (!Tools_Active)
+                            {
+                                Debug.Log("Exam_Lighter");
+                                Fire.SetActive(true);
+                                StartCoroutine(TransparencyLoad());
+
+
+
+                                Tools_Active = false;
+
+
+                            }
+                        }
+
+                    }
+
+                    if (hit.collider.CompareTag("Hammer") && Input.GetMouseButtonDown(0))
+                    {
+                        hit.collider.gameObject.SetActive(false);
+                        IsHammer = true;
+                        ObjectsEquipment[3].SetActive(true);
+                        ObjectsEquipment[3].transform.position = RightHand.transform.position;
+                        ObjectsEquipment[3].transform.SetParent(RightHand.transform, true);
+                        Tools_Active = true;
+                    }
+                }
+
+
+
+                Debug.Log(Transparency);
+                // Rayo que detecta el layer "Wall" para cambiar el layer del rayo que detecta los objetos interactuables a "Object"
+                if (Physics.Raycast(ray, out hit, 16, layers[3]))
+                {
+
+                    layers[2] = LayerMask.GetMask("Nothing");
+                }
+                else if (!Physics.Raycast(ray, out hit, 16, layers[3]))
+                {
+                    layers[2] = LayerMask.GetMask("Object");
+
+                }
+
+
+                if (Physics.Raycast(ray, out hit, 16, layers[4]) && IsKey)
+                {
+
+                    Tools_Active = true;
+                    Pos_OpenDrawer = new Vector3(Pos_OpenDrawer.x, hit.transform.localPosition.y, Pos_OpenDrawer.z);
+                    if (HitBox_Lock.TryGetComponent<Rigidbody>(out _))
+                    {
+
+                        Tools_Active = false;
+
+                        ObjectsEquipment[0].SetActive(false);
+
+
+
+
+                        if (Input.GetMouseButton(0))
+                        {
+                            hit.transform.localPosition = Vector3.MoveTowards(hit.transform.localPosition, Pos_OpenDrawer, SpeedDrawer * Time.deltaTime);
+                            Debug.Log("AAAA");
+                        }
+
+
+                    }
+
+
+
+                }
+
+                Locking(HitBox_Lock); // Pass the required argument to the Locking method  
             }
 
 
-        }
-        if (Physics.Raycast(ray, out hit, 16, layers[4]) && IsKey)
-        {
-            
-            Pos_OpenDrawer = new Vector3(Pos_OpenDrawer.x, hit.transform.localPosition.y, Pos_OpenDrawer.z);
-            if (Input.GetMouseButton(0) && HitBox_Lock.TryGetComponent<Rigidbody>(out _))
+
+            void Locking(GameObject HitBox_Lock)
             {
-                hit.transform.localPosition = Vector3.MoveTowards(hit.transform.localPosition, Pos_OpenDrawer, SpeedDrawer * Time.deltaTime);
-                 Debug.Log("AAAA");
+                if (IsKey)
+                {
+                    HitBox_Lock.layer = LayerMask.NameToLayer("Fall_Object");
+
+
+                }
             }
 
+
+            IEnumerator TransparencyLoad()
+            {
+                Material Ice = IceObject.GetComponent<Renderer>().material;
+                while (Transpayency_Int >= 0)
+                {
+                    Transpayency_Int -= 0.1f;
+
+
+                    Ice.SetFloat("_Transparent", Transpayency_Int);
+                    yield return new WaitForSeconds(0.1f);
+                    Ice.SetColor("_Color_Back", Color.black);
+                    yield return null;
+                }
+
+                if (Transpayency_Int == 0)
+                {
+                    Destroy(IceObject);
+                }
+
+
+            }
         }
-
-        Locking(HitBox_Lock); // Pass the required argument to the Locking method  
     }
-
-
-      
-
-
-
-    void Locking(GameObject HitBox_Lock)
-    {
-        if (IsKey)
-        {   
-            HitBox_Lock.layer = LayerMask.NameToLayer("Fall_Object");
-
-        }
-    }
-
-
-    
-
-
 }
-
-
-

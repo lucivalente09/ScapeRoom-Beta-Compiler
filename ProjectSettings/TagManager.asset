@@ -7,6 +7,9 @@ TagManager:
   - Key
   - Candle
   - Drawer
+  - Exam_Candle
+  - Lighter
+  - Hammer
   layers:
   - Default
   - TransparentFX
