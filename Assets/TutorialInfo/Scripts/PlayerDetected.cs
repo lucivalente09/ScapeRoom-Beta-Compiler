@@ -29,7 +29,7 @@ public class PlayerDetected : MonoBehaviour
 
     [SerializeField] GameObject[] ObjectsEquipment;
 
-    [SerializeField] protected GameObject HitBox_Lock; // Added this serialized field to provide the required argument  
+    [SerializeField] protected GameObject HitBox_Lock ; // Added this serialized field to provide the required argument  
 
 
     [SerializeField] Vector3 Pos_OpenDrawer;
@@ -215,10 +215,27 @@ public class PlayerDetected : MonoBehaviour
 
             if (hit.collider.CompareTag("Exam_Paper") && IsPaper)
             {
-                if (!Tools_Active)
-                {
 
-                }
+                    if (Input.GetMouseButtonDown(0))
+                    {
+
+                        Debug.Log("Exam");
+
+                        if (RightHand.transform.childCount <= 0)
+                        {
+                            Debug.Log("No hay objeto en la mano");
+                        }
+
+                        if (RightHand.transform.childCount >= 1)
+                        {
+                            ObjectsEquipment[4].transform.position = Exam_Candle.transform.position;
+                            ObjectsEquipment[4].transform.SetParent(Exam_Candle.transform, true);
+                            ObjectsEquipment[4].tag = "Untagged";
+
+                        }
+
+                    }
+                
             }
 
 
