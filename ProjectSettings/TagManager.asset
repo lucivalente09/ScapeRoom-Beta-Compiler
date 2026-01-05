@@ -12,6 +12,7 @@ TagManager:
   - Hammer
   - Paper
   - Exam_Paper
+  - KeyFinal
   layers:
   - Default
   - TransparentFX

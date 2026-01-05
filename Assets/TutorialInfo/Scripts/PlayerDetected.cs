@@ -21,16 +21,21 @@ public class PlayerDetected : MonoBehaviour
     [SerializeField] bool IsCandle = false;
     bool IsLighter = false;
     protected bool IsKey = false;
+    bool IsKeyFinal = false;
     bool IsHammer = false;
     bool IsPaper = false;
-    [SerializeField] GameObject[] Planks;
-    [SerializeField] int int_Planks = 4;
+    [SerializeField] protected GameObject[] Planks;
+    [SerializeField] protected int int_Planks = 4;
+
+
 
 
     [SerializeField] GameObject[] ObjectsEquipment;
 
-    [SerializeField] protected GameObject HitBox_Lock ; // Added this serialized field to provide the required argument  
-
+    [SerializeField] protected GameObject HitBox_Lock; // Added this serialized field to provide the required argument  
+    [SerializeField] protected GameObject HitBox_LockFinal;
+    [SerializeField] GameObject Exam_Paper;
+    [SerializeField] GameObject Exam_KeyFinal;
 
     [SerializeField] Vector3 Pos_OpenDrawer;
     [SerializeField] int SpeedDrawer;
@@ -117,6 +122,24 @@ public class PlayerDetected : MonoBehaviour
                     ObjectsEquipment[0].transform.position = RightHand.transform.position;
                     ObjectsEquipment[0].transform.SetParent(RightHand.transform, true);
 
+
+                }
+
+            }
+
+            if (hit.collider.CompareTag("KeyFinal") && Input.GetMouseButtonDown(0))
+            {
+
+
+                if (!Tools_Active)
+                {
+                    hit.collider.gameObject.SetActive(false);
+
+                    IsKeyFinal = true;
+                    ObjectsEquipment[5].SetActive(true);
+                    ObjectsEquipment[5].transform.position = RightHand.transform.position;
+                    ObjectsEquipment[5].transform.SetParent(RightHand.transform, true);
+                    
 
                 }
 
@@ -228,10 +251,11 @@ public class PlayerDetected : MonoBehaviour
 
                         if (RightHand.transform.childCount >= 1)
                         {
-                            ObjectsEquipment[4].transform.position = Exam_Candle.transform.position;
-                            ObjectsEquipment[4].transform.SetParent(Exam_Candle.transform, true);
+                            ObjectsEquipment[4].transform.position = Exam_Paper.transform.position;
+                            ObjectsEquipment[4].transform.SetParent(Exam_Paper.transform, true);
                             ObjectsEquipment[4].tag = "Untagged";
-
+                            Exam_KeyFinal.SetActive(true);
+                            
                         }
 
                     }
@@ -284,6 +308,12 @@ public class PlayerDetected : MonoBehaviour
 
 
             }
+
+            if (IsKeyFinal)
+            {
+                
+                HitBox_LockFinal.layer = LayerMask.NameToLayer("Fall_Object");
+            }
         }
 
         void PlanksFall()
@@ -293,6 +323,7 @@ public class PlayerDetected : MonoBehaviour
                 foreach (GameObject plank in Planks)
                 {
                     plank.layer = LayerMask.NameToLayer("Fall_Object");
+                  
                     int_Planks--;
                 }
 
