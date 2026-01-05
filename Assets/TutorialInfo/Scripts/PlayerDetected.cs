@@ -19,15 +19,26 @@ public class PlayerDetected : MonoBehaviour
     [SerializeField] bool Tools_Active = false;
 
     [SerializeField] bool IsCandle = false;
-    bool IsLighter = false;
-    protected bool IsKey = false;
-    bool IsKeyFinal = false;
-    bool IsHammer = false;
-    bool IsPaper = false;
+    [SerializeField] bool IsLighter = false;
+    [SerializeField] protected bool IsKey = false;
+    [SerializeField] bool IsKeyFinal = false;
+    [SerializeField] protected bool IsHammer = false;
+    [SerializeField] bool IsPaper = false;
     [SerializeField] protected GameObject[] Planks;
     [SerializeField] protected int int_Planks = 4;
 
-
+    public int Int_Planks
+    {
+        get
+        {
+            return int_Planks;
+        }
+        set
+        {
+            int_Planks = Mathf.Abs(value);
+        }
+    }
+    bool IsFinal = false;
 
 
     [SerializeField] GameObject[] ObjectsEquipment;
@@ -42,6 +53,8 @@ public class PlayerDetected : MonoBehaviour
 
     [SerializeField] GameObject Exam_Candle;
     [SerializeField] GameObject Fire, IceObject;
+
+    [SerializeField] Canvas Canvas_FinalGame;
 
 
     [SerializeField] float Transparency;
@@ -67,6 +80,7 @@ public class PlayerDetected : MonoBehaviour
     private void Start()
     {
         Transpayency_Int = 1;
+        int_Planks = Planks.Length;
 
     }
 
@@ -74,12 +88,14 @@ public class PlayerDetected : MonoBehaviour
     void Update()
     {
 
+
+
         RaycastHit hit = new RaycastHit();
 
 
         Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
 
-        Debug.DrawRay(MainCamera.transform.position, ray.direction * 16, Color.red);
+        Debug.DrawRay(MainCamera.transform.position, ray.direction * 20, Color.red);
 
         Debug.Log("Child count: " + RightHand.transform.childCount);
 
@@ -93,18 +109,28 @@ public class PlayerDetected : MonoBehaviour
         }
 
         // Rayo que detecta el layer "Fall_Object"
-        if (Physics.Raycast(ray, out hit, 16, layers[1]))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layers[1]))
         {
             // Si se hace click derecho en el objeto, se le añade un Rigidbody para que caiga
             if (Input.GetMouseButtonDown(0))
             {
                 Debug.Log("Hit object: " + hit.transform.name);
                 hit.transform.AddComponent<Rigidbody>();
+                if (IsFinal)
+                {
+                    int_Planks--;
+                }
+                
+
+                if (IsKeyFinal)
+                {
+                    Destroy(ObjectsEquipment[5]);
+                }
             }
 
         }
         // Rayo que detecta el layer "Object"
-        if (Physics.Raycast(ray, out hit, 16, layers[2]))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layers[2]))
         {
 
             Debug.Log("Hit object: " + hit.transform.name);
@@ -129,7 +155,6 @@ public class PlayerDetected : MonoBehaviour
 
             if (hit.collider.CompareTag("KeyFinal") && Input.GetMouseButtonDown(0))
             {
-
 
                 if (!Tools_Active)
                 {
@@ -200,7 +225,7 @@ public class PlayerDetected : MonoBehaviour
 
                 }
 
-                if (Input.GetMouseButtonDown(0) && IsLighter)
+                if (IsLighter)
                 {
                     if (!Tools_Active)
                     {
@@ -215,24 +240,33 @@ public class PlayerDetected : MonoBehaviour
 
             if (hit.collider.CompareTag("Hammer") && Input.GetMouseButtonDown(0))
             {
-                hit.collider.gameObject.SetActive(false);
-                IsHammer = true;
-                ObjectsEquipment[3].SetActive(true);
-                ObjectsEquipment[3].transform.position = RightHand.transform.position;
-                ObjectsEquipment[3].transform.SetParent(RightHand.transform, true);
+                if (!Tools_Active)
+                {
+                    Debug.Log("Hammer_Detected");
+                    hit.collider.gameObject.SetActive(false);
+                    IsHammer = true;
+                    ObjectsEquipment[3].SetActive(true);
+                    ObjectsEquipment[3].transform.position = RightHand.transform.position;
+                    ObjectsEquipment[3].transform.SetParent(RightHand.transform, true);
 
-                PlanksFall();
+                    PlanksFall();
+                }
+
             }
 
 
             if (hit.collider.CompareTag("Paper") && Input.GetMouseButtonDown(0))
             {
-                Debug.Log("Paper_Detected");
-                hit.collider.gameObject.SetActive(false);
-                IsPaper = true;
-                ObjectsEquipment[4].SetActive(true);
-                ObjectsEquipment[4].transform.position = RightHand.transform.position;
-                ObjectsEquipment[4].transform.SetParent(RightHand.transform, true);
+                if (!Tools_Active)
+                {
+                    Debug.Log("Paper_Detected");
+                    hit.collider.gameObject.SetActive(false);
+                    IsPaper = true;
+                    ObjectsEquipment[4].SetActive(true);
+                    ObjectsEquipment[4].transform.position = RightHand.transform.position;
+                    ObjectsEquipment[4].transform.SetParent(RightHand.transform, true);
+
+                }
 
             }
 
@@ -266,19 +300,19 @@ public class PlayerDetected : MonoBehaviour
 
             Debug.Log(Transparency);
             // Rayo que detecta el layer "Wall" para cambiar el layer del rayo que detecta los objetos interactuables a "Object"
-            if (Physics.Raycast(ray, out hit, 16, layers[3]))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layers[3]))
             {
-
-                layers[2] = LayerMask.GetMask("Nothing");
+                layers[2] = LayerMask.GetMask("Ignore Raycast");
             }
-            else if (!Physics.Raycast(ray, out hit, 16, layers[3]))
+
+            else if (!Physics.Raycast(ray, out hit, Mathf.Infinity, layers[3]))
             {
                 layers[2] = LayerMask.GetMask("Object");
 
             }
 
 
-            if (Physics.Raycast(ray, out hit, 16, layers[4]) && IsKey)
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layers[4]) && IsKey)
             {
 
                 Pos_OpenDrawer = new Vector3(Pos_OpenDrawer.x, hit.transform.localPosition.y, Pos_OpenDrawer.z);
@@ -293,14 +327,15 @@ public class PlayerDetected : MonoBehaviour
                         Debug.Log("AAAA");
                     }
                 }
+
             }
 
-            Locking(HitBox_Lock); // Pass the required argument to the Locking method  
+            Locking(HitBox_Lock, HitBox_LockFinal); // Pass the required argument to the Locking method  
         }
 
 
 
-        void Locking(GameObject HitBox_Lock)
+        void Locking(GameObject HitBox_Lock, GameObject HitBox_LockFinal)
         {
             if (IsKey)
             {
@@ -318,18 +353,36 @@ public class PlayerDetected : MonoBehaviour
 
         void PlanksFall()
         {
+           
             if (IsHammer && int_Planks > 0)
             {
+                IsFinal = true;
+                
                 foreach (GameObject plank in Planks)
                 {
                     plank.layer = LayerMask.NameToLayer("Fall_Object");
-                  
-                    int_Planks--;
+                    
+
                 }
 
             }
+
+            
+
         }
 
+        if (int_Planks < 0)
+        {
+            Destroy(ObjectsEquipment[3]);
+        }
+
+        if (HitBox_LockFinal.TryGetComponent<Rigidbody>(out _) && int_Planks <= 0)
+        {
+            
+            Debug.Log("Object_Fin");
+            Canvas_FinalGame.gameObject.SetActive(true);
+            
+        }
 
 
         IEnumerator TransparencyLoad()
@@ -337,7 +390,7 @@ public class PlayerDetected : MonoBehaviour
             Material Ice = IceObject.GetComponent<Renderer>().material;
             while (Transpayency_Int >= 0)
             {
-                Transpayency_Int -= 0.1f;
+                Transpayency_Int -= 0.01f;
 
 
                 Ice.SetFloat("_Transparent", Transpayency_Int);

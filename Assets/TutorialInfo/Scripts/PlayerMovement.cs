@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement :MonoBehaviour
 {
 
     [SerializeField] float Speed;
@@ -82,8 +82,9 @@ public class PlayerMovement : MonoBehaviour
 
                 break;
 
-
+            
         }
+
 
         Player.transform.position = Vector3.Lerp(Player.transform.position, PositionWayPoint.transform.position, Speed * Time.deltaTime);
         Player.transform.rotation = Quaternion.Slerp(Player.transform.rotation, RotationWayPoint, Speed * Time.deltaTime);
